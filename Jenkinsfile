@@ -55,20 +55,20 @@ pipeline {
                 echo 'Deploying to EKS...'
                 sh """
                     export KUBECONFIG=${KUBECONFIG}
-                    
-                    # Update image in deployment
+
+                    # Apply deployment and service first
+                    kubectl apply -f k8s/deployment.yaml --kubeconfig=${KUBECONFIG}
+                    kubectl apply -f k8s/service.yaml --kubeconfig=${KUBECONFIG}
+
+                    # Update image to current build
                     kubectl set image deployment/nodejs-shopping \
                         nodejs-shopping=${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG} \
                         --kubeconfig=${KUBECONFIG}
-                    
-                    # Apply manifests
-                    kubectl apply -f k8s/deployment.yaml --kubeconfig=${KUBECONFIG}
-                    kubectl apply -f k8s/service.yaml --kubeconfig=${KUBECONFIG}
-                    
-                    # Wait for rollout
+
+                    # Wait for rollout to complete
                     kubectl rollout status deployment/nodejs-shopping \
                         --kubeconfig=${KUBECONFIG} \
-                        --timeout=120s
+                        --timeout=180s
                 """
             }
         }
@@ -77,8 +77,15 @@ pipeline {
             steps {
                 echo 'Getting application URL...'
                 sh """
+                    echo "=== Application URL ==="
                     kubectl get service nodejs-shopping-service \
-                        --kubeconfig=${KUBECONFIG}
+                        --kubeconfig=${KUBECONFIG} \
+                        -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+                    echo ""
+                    echo "=== All Services ==="
+                    kubectl get services --kubeconfig=${KUBECONFIG}
+                    echo "=== All Pods ==="
+                    kubectl get pods --kubeconfig=${KUBECONFIG}
                 """
             }
         }
