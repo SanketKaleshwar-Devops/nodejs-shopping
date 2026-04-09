@@ -56,7 +56,15 @@ pipeline {
                 sh """
                     export KUBECONFIG=${KUBECONFIG}
 
-                    # Apply deployment and service first
+                    # Deploy MongoDB first
+                    kubectl apply -f k8s/mongodb.yaml --kubeconfig=${KUBECONFIG}
+
+                    # Wait for MongoDB to be ready
+                    kubectl rollout status deployment/mongodb \
+                        --kubeconfig=${KUBECONFIG} \
+                        --timeout=120s
+
+                    # Deploy application and service
                     kubectl apply -f k8s/deployment.yaml --kubeconfig=${KUBECONFIG}
                     kubectl apply -f k8s/service.yaml --kubeconfig=${KUBECONFIG}
 
@@ -65,7 +73,7 @@ pipeline {
                         nodejs-shopping=${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG} \
                         --kubeconfig=${KUBECONFIG}
 
-                    # Wait for rollout to complete
+                    # Wait for app rollout to complete
                     kubectl rollout status deployment/nodejs-shopping \
                         --kubeconfig=${KUBECONFIG} \
                         --timeout=180s

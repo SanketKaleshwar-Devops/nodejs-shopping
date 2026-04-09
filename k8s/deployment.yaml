@@ -19,6 +19,9 @@ spec:
         image: 892512305960.dkr.ecr.ap-south-1.amazonaws.com/nodejs-shopping:latest
         ports:
         - containerPort: 3000
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://mongodb-service:27017/shopping"
         resources:
           requests:
             memory: "128Mi"
