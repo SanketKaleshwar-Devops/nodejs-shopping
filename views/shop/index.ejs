@@ -1,12 +1,227 @@
 <%- include('../includes/head.ejs') %>
 <link rel="stylesheet" href="/css/product.css">
+<style>
+  /* Hero Banner */
+  .hero {
+    background: linear-gradient(135deg, #1a472a 0%, #2d6a4f 50%, #40916c 100%);
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+    margin-bottom: 40px;
+    border-radius: 0 0 20px 20px;
+  }
+
+  .hero h1 {
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+  }
+
+  .hero-btn {
+    background: white;
+    color: #1a472a;
+    padding: 12px 35px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    display: inline-block;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .hero-btn:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+
+  /* Features Section */
+  .features {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px 40px 40px;
+    flex-wrap: wrap;
+  }
+
+  .feature-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px 25px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    flex: 1;
+    min-width: 200px;
+    max-width: 250px;
+    transition: transform 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+  }
+
+  .feature-card h3 {
+    color: #1a472a;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+  }
+
+  .feature-card p {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  /* Banner Images */
+  .banner-section {
+    display: flex;
+    gap: 20px;
+    padding: 0 40px 40px;
+    flex-wrap: wrap;
+  }
+
+  .banner-card {
+    flex: 1;
+    min-width: 250px;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    height: 200px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  }
+
+  .banner-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .banner-card:hover img {
+    transform: scale(1.05);
+  }
+
+  .banner-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    color: white;
+    padding: 20px;
+  }
+
+  .banner-overlay h3 {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 20px 20px 60px;
+  }
+
+  .empty-state h2 {
+    color: #1a472a;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .empty-state p {
+    color: #666;
+    font-size: 1rem;
+  }
+
+  /* Products section title */
+  .section-title {
+    text-align: center;
+    padding: 20px;
+    font-size: 1.8rem;
+    color: #1a472a;
+    margin-bottom: 10px;
+  }
+</style>
 </head>
 
 <body>
 <%- include('../includes/navigation.ejs') %>
 
 <main>
+  <!-- Hero Banner -->
+  <div class="hero">
+    <h1>🛒 Welcome to NodeShopping</h1>
+    <p>Discover amazing products at unbeatable prices. Shop smarter, live better.</p>
+    <% if (!isAuthenticated) { %>
+      <a href="/signup" class="hero-btn">Get Started - It's Free!</a>
+    <% } else { %>
+      <a href="/products" class="hero-btn">Browse Products</a>
+    <% } %>
+  </div>
+
+  <!-- Features Section -->
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">🚚</div>
+      <h3>Free Delivery</h3>
+      <p>Free shipping on all orders above $50. Fast and reliable delivery.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3>Secure Payment</h3>
+      <p>Your payment information is always safe and encrypted.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">↩️</div>
+      <h3>Easy Returns</h3>
+      <p>Not satisfied? Return within 30 days for a full refund.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💬</div>
+      <h3>24/7 Support</h3>
+      <p>Our support team is always here to help you anytime.</p>
+    </div>
+  </div>
+
+  <!-- Banner Images -->
+  <div class="banner-section">
+    <div class="banner-card">
+      <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600" alt="Electronics">
+      <div class="banner-overlay">
+        <h3>📱 Electronics</h3>
+      </div>
+    </div>
+    <div class="banner-card">
+      <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600" alt="Fashion">
+      <div class="banner-overlay">
+        <h3>👟 Fashion</h3>
+      </div>
+    </div>
+    <div class="banner-card">
+      <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600" alt="Accessories">
+      <div class="banner-overlay">
+        <h3>⌚ Accessories</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Section -->
   <% if (products.length > 0) { %>
+    <h2 class="section-title">🔥 Featured Products</h2>
     <div class="grid">
       <% for (let product of products) { %>
         <article class="card product-item">
@@ -31,7 +246,10 @@
     </div>
     <%- include('../includes/pagination.ejs') %>
   <% } else { %>
-    <h1>No Products to display...</h1>
+    <div class="empty-state">
+      <h2>🛍️ Products Coming Soon!</h2>
+      <p>We are adding amazing products. Check back soon!</p>
+    </div>
   <% } %>
 </main>
 
