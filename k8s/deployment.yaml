@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-shopping
+  labels:
+    app: nodejs-shopping
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs-shopping
+  template:
+    metadata:
+      labels:
+        app: nodejs-shopping
+    spec:
+      containers:
+      - name: nodejs-shopping
+        image: 892512305960.dkr.ecr.ap-south-1.amazonaws.com/nodejs-shopping:latest
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
