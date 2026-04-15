@@ -32,7 +32,7 @@ pipeline {
             steps {
                 echo 'Running tests...'
                 sh """
-                    docker run --rm ${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG} node -e "console.log('App test passed ✅')"
+                    docker run --rm ${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG} node -e "console.log('App test passed ')"
                 """
             }
         }
